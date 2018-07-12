@@ -2,33 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Devvy.FluidFlow
+namespace NFluid
 {
-    public interface IFlow<T>
-    {
-        IFlow<T> AddParameters(params object[] args);
-        IFlow<TResult> Call<TResult>(Func<T, TResult> doSomething);
-        IFlow<TResult> Call<TResult, T2>(Func<T, T2, TResult> doSomething);
-        IFlow<T> Catch<TException>() where TException : Exception;
-        T Return();
-    }
-
-    internal class Flow
-    {
-        internal static IFlow<T> Create<T>(T input, IDictionary<Type, object> parameters = null)
-        {
-            return new Flow<T>(input, parameters);
-        }
-
-        internal static IFlow<T> Create<T>(
-            Delegate inputFunction,
-            Delegate[] inputParameters,
-            IDictionary<Type, object> parameters = null)
-        {
-            return new Flow<T>(inputFunction, inputParameters, parameters);
-        }
-    }
-
     internal class Flow<T> : IFlow<T>
     {
         private Delegate InputFunction { get; }
@@ -84,7 +59,7 @@ namespace Devvy.FluidFlow
 
         public IFlow<TResult> Call<TResult>(Func<T, TResult> doSomething)
         {
-            return Flow.Create<TResult>(
+            return FlowFactory.Create<TResult>(
                 doSomething,
                 new Delegate[]
                 {
@@ -106,14 +81,6 @@ namespace Devvy.FluidFlow
         {
             //return Flow.Create(doSomething(Input, (T2)_parameters[typeof(T2)]), _parameters);
             return null;
-        }
-    }
-
-    public static class FlowExtensions
-    {
-        public static IFlow<T> StartFlow<T>(this T obj)
-        {
-            return Flow.Create(obj);
         }
     }
 }

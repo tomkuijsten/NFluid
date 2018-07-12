@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Devvy.FluidFlow.Tests
+namespace NFluid.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class FlowTests
     {
         [TestMethod]
         public void BasicFlow()
