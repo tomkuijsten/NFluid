@@ -30,7 +30,7 @@ namespace NFluid.Tests
                     .StartFlow()
                     .Call((i) => 42)
                     .Call((i) => "42")
-                    .Call((i) => DateTime.Now)
+                    .Chain((i) => DateTime.Now)
                     .Call((i) => i.Year)
                     .Return();
 
@@ -45,7 +45,8 @@ namespace NFluid.Tests
             object output =
                 input
                     .StartFlow()
-                    .AddParameters(DateTime.Now)
+                    .Register(12.3)
+                    .Register(DateTime.Now)
                     .Call((string i, DateTime dt) => dt.Year)
                     .Return();
 

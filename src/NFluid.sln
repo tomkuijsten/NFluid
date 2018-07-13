@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFluid", "Devvy.FluidFlow\NFluid.csproj", "{EDBD4FE9-7DED-4FA1-83D1-B416783E6805}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFluid", "NFluid\NFluid.csproj", "{EDBD4FE9-7DED-4FA1-83D1-B416783E6805}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFluid.Tests", "Devvy.FluidFlow.Tests\NFluid.Tests.csproj", "{69636DEE-0B38-4981-A33A-9968A7967AD4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFluid.Tests", "NFluid.Tests\NFluid.Tests.csproj", "{69636DEE-0B38-4981-A33A-9968A7967AD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

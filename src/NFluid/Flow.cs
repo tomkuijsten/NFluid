@@ -39,13 +39,6 @@ namespace NFluid
             return this;
         }
 
-        public IFlow<T> AddParameters(params object[] args)
-        {
-            args.ToList().ForEach(a => _parameters.Add(a.GetType(), a));
-
-            return this;
-        }
-
         public T Return()
         {
             var materializedParameters = new List<object>();
@@ -57,12 +50,18 @@ namespace NFluid
             return (T)InputFunction.DynamicInvoke(materializedParameters.ToArray());
         }
 
-        public IFlow<TResult> Call<TResult>(Func<T, TResult> doSomething)
+        public IFlow<TResult> Call<TResult>(Func<T, TResult> d) => CallInternal<TResult>(d);
+
+        public IFlow<TResult> Call<TResult, T2>(Func<T, T2, TResult> d) => CallInternal<TResult>(d);
+
+        private IFlow<TResult> CallInternal<TResult>(Delegate d)
         {
-            return FlowFactory.Create<TResult>(
-                doSomething,
-                new Delegate[]
-                {
+            List<Delegate> parameterDelegates = new List<Delegate>();
+
+            var parameters = d.Method.GetParameters().Skip(1);
+
+            // assume the first one is the input
+            parameterDelegates.Add(
                     new Func<object>(() =>
                     {
                         var materializedParameters = new List<object>();
@@ -72,15 +71,40 @@ namespace NFluid
                         }
 
                         return InputFunction.DynamicInvoke(materializedParameters.ToArray());
-                    })
-                },
-                _parameters);
+                    }));
+
+            foreach (var p in parameters)
+            {
+                parameterDelegates.Add(new Func<object>(() => _parameters[p.ParameterType]));
+            }
+
+            return FlowFactory.Create<TResult>(d, parameterDelegates.ToArray(), _parameters);
         }
 
-        public IFlow<TResult> Call<TResult, T2>(Func<T, T2, TResult> doSomething)
+        public IFlow<T> Register<TInject>(TInject value)
         {
-            //return Flow.Create(doSomething(Input, (T2)_parameters[typeof(T2)]), _parameters);
-            return null;
+            _parameters.Add(typeof(TInject), value);
+
+            return this;
+        }
+
+        public IFlow<TResult> Chain<TResult>(Func<T, TResult> method) => CallInternal<TResult>(method);
+
+        public IFlow<TResult> Chain<TResult, T2>(Func<T, T2, TResult> method) => CallInternal<TResult>(method);
+
+        IFlow<T> IFlow<T>.Call<TResult>(Func<T, TResult> method)
+        {
+            throw new NotImplementedException();
+        }
+
+        IFlow<T> IFlow<T>.Call<TResult, T2>(Func<T, T2, TResult> method)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IFlow<T> PersistResult(string paramName)
+        {
+            throw new NotImplementedException();
         }
     }
 }
