@@ -5,7 +5,7 @@ namespace NFluid
 {
     internal class FlowFactory
     {
-        internal static IFlow<T> Create<T>(T input, IDictionary<Type, object> parameters = null)
+        internal static IFlow<T> Create<T>(T input, IDictionary<string, object> parameters = null)
         {
             return new Flow<T>(input, parameters);
         }
@@ -13,7 +13,7 @@ namespace NFluid
         internal static IFlow<T> Create<T>(
             Delegate inputFunction,
             Delegate[] inputParameters,
-            IDictionary<Type, object> parameters = null)
+            IDictionary<string, object> parameters = null)
         {
             return new Flow<T>(inputFunction, inputParameters, parameters);
         }

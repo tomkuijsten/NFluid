@@ -11,12 +11,11 @@ namespace NFluid
         /// <param name="value">The parameter for the injection framework</param>
         /// <returns>The current object</returns>
         IFlow<T> Register<TInject>(TInject value);
+        IFlow<T> Register<TInject>(TInject value, string parameterName);
 
-        IFlow<T> Call<TResult>(Func<T, TResult> method);
-        IFlow<T> Call<TResult, T2>(Func<T, T2, TResult> method);
 
         /// <summary>
-        /// Start or continue a chain of methods where the output of the first is used as input
+        /// Start or continue a chain where the output of the first is used as input
         /// for the next.
         /// </summary>
         /// <typeparam name="TResult">Return type of the function</typeparam>
@@ -26,13 +25,7 @@ namespace NFluid
 
         /// <see cref="Chain{TResult}(Func{T, TResult})"/>
         IFlow<TResult> Chain<TResult, T2>(Func<T, T2, TResult> method);
-
-        /// <summary>
-        /// Persist last output to the injection framework
-        /// </summary>
-        /// <param name="paramName">The name of the parameter</param>
-        /// <returns></returns>
-        IFlow<T> PersistResult(string paramName);
+        IFlow<TResult> Chain<TResult, T2, T3>(Func<T, T2, T3, TResult> method);
 
         IFlow<T> Catch<TException>() where TException : Exception;
 

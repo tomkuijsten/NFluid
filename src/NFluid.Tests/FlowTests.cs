@@ -14,24 +14,24 @@ namespace NFluid.Tests
             object output =
                 input
                     .StartFlow()
-                    .Call((i) => 42)
+                    .Chain((i) => 42)
                     .Return();
 
             Assert.AreEqual(42, output);
         }
 
         [TestMethod]
-        public void CallChainFlow()
+        public void ChainChainFlow()
         {
             string input = "";
 
             object output =
                 input
                     .StartFlow()
-                    .Call((i) => 42)
-                    .Call((i) => "42")
+                    .Chain((i) => 42)
+                    .Chain((i) => "42")
                     .Chain((i) => DateTime.Now)
-                    .Call((i) => i.Year)
+                    .Chain((i) => i.Year)
                     .Return();
 
             Assert.AreEqual(DateTime.Now.Year, output);
@@ -47,10 +47,26 @@ namespace NFluid.Tests
                     .StartFlow()
                     .Register(12.3)
                     .Register(DateTime.Now)
-                    .Call((string i, DateTime dt) => dt.Year)
+                    .Chain((string i, DateTime dt) => dt.Year)
                     .Return();
 
             Assert.AreEqual(DateTime.Now.Year, output);
+        }
+
+        [TestMethod]
+        public void InjectParameters_ByName()
+        {
+            string input = "";
+
+            object output =
+                input
+                    .StartFlow()
+                    .Register(41, "p1")
+                    .Register(1, "p2")
+                    .Chain((string i, int p1, int p2) => p1 + p2)
+                    .Return();
+
+            Assert.AreEqual(42, output);
         }
 
         [TestMethod]
@@ -61,7 +77,7 @@ namespace NFluid.Tests
             object output =
                 input
                     .StartFlow()
-                    .Call((i) => { throw new ArgumentException("41"); return 41; })
+                    .Chain((i) => { throw new ArgumentException("41"); return 41; })
                     .Catch<Exception>()
                     .Return();
 
