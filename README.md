@@ -16,4 +16,6 @@ var output =
 Planned:
  - Catch
  - AddParameters (for dynamic injection)
- - much more...
+ - Wait
+ - Repeat
+ - .. and much more
